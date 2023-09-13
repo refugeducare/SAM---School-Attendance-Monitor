@@ -1,0 +1,45 @@
+/*************************************************************************************/
+function onEdit(e) {
+  SAM_LIB_v10.onEdit(e);
+}
+/*************************************************************************************/
+// base_attendance 
+/*************************************************************************************/
+function onOpen() {
+  SAM_LIB_v10.onOpen();
+}
+// function onOpen() {
+//   var ui = SpreadsheetApp.getUi();
+//   ui.createMenu('title')
+//     .addItem('opt1', 'func1')
+//     .addToUi();
+// }
+// function func1() {
+//   Browser.msgBox('asd');
+// }
+/*****************************************/
+// function onOpen() {
+//   var ui = SpreadsheetApp.getUi();
+//   ui.createMenu('SAM')
+//     .addItem('Update Attendance', 'actualizeAttendanceLib')
+//     .addToUi();
+// }
+/*****************************************/
+function actualizeAttendanceLib(e) {
+  SAM_LIB_v10.preserveAttendance();
+  SpreadsheetApp.flush();  
+  Utilities.sleep(3000); // 1000 milliseconds = 1 second
+  SAM_LIB_v10.updateAttendance();
+}
+/*************************************************************************************/
+function insertCheck() {
+  SAM_LIB_v10.insertCheckboxes("students!I5:I105");
+}
+function delEntry(e) {
+  SAM_LIB_v10.delEntry(e);
+}
+/*************************************************************************************/
+// base_attendance 
+/*************************************************************************************/
+/*************************************************************************************/
+/*************************************************************************************/
