@@ -1,0 +1,295 @@
+// parent folder central            https://drive.google.com/drive/folders/1zWMTHRMfAR3fE3bEp0kOR4QSucNiEbcM
+// googleSheet   SAM_central_base   https://docs.google.com/spreadsheets/d/1u_XA584h97AqrzQHfkDPDNhfHCiJ0mdsh9LKy9YFB_E/edit#gid=2137001534
+// bound script  centralBase        https://script.google.com/u/0/home/projects/1HNFbwjemWgRXv6FhHuOv4I4X1uyRPSSKhuO1v-qvXiEx2Cqkr7IP9N8e/edit
+
+//***************************************
+// GLOBAL ******************************
+//***************************************
+var activeSS = SpreadsheetApp.getActiveSpreadsheet();
+            /** in this sheet are stored the data to assign to the variables of this script */
+const PROGRAM_DATA_SHEET = activeSS.getSheetByName("ProgramDATA"); 
+const PROG_DATA = PROGRAM_DATA_SHEET.getDataRange().getValues(); // get the whole datasheet
+            /** The google fileID of the template file for the creation of the replicas */ 
+const TEMPLATE_FILE_ID = getVar(PROG_DATA, 'TEMPLATE_FILE_ID'); 
+const TEMPLATE_FILE_ID_2 = getVar(PROG_DATA, 'TEMPLATE_FILE_ID_2'); 
+            /** the folder where the replicas will be stored after their creation */
+const DEST_FOLDER = getVar(PROG_DATA, 'DEST_FOLDER'); 
+            /** contains the index of all individual / deployment addresses / file-links / names / emails etc. of every individual the deployment is addressed to */
+const INDEX_SHEET = getVar(PROG_DATA, 'INDEX_SHEET'); 
+const TITLE_ROW = getVar(PROG_DATA, 'TITLE_ROW'); /** the headers of the index */
+const FIRST_DATA_ROW = getVar(PROG_DATA, 'FIRST_DATA_ROW'); /** the index itself (the values) */
+            /** the column number of the cells where the filename (with hyperlink) are stored */
+const FILE_LINK_COL = getVar(PROG_DATA, 'FILE_LINK_COL'); 
+            /** the column number of the cells where the URLs (with hyperlink) are stored */
+const URL_COL = getVar(PROG_DATA, 'URL_COL'); 
+            /** the column number of the cells where the name of the institution is stored */
+const INSTITUTION_COL = getVar(PROG_DATA, 'INSTITUTION_COL'); 
+            /** the column number of the cells where the name of the particular shelter is stored */
+const NAME_COL = getVar(PROG_DATA, 'NAME_COL'); 
+            /** the column number of the cells where the email of the particular shelter is stored */
+const EMAIL_COL = getVar(PROG_DATA, 'EMAIL_COL'); 
+            /** the name of the sheet used as a template to copy for the creation of a new sheet for a particular shelter */
+const TEMPLATE_SHEET_NAME = getVar(PROG_DATA, 'TEMPLATE_SHEET_NAME'); 
+// const UI = SpreadsheetApp.getUi();
+
+/*****************************************/
+// centralBase 
+/*****************************************/
+function createMenu() {
+  var ui = SpreadsheetApp.getUi();
+  ui.createMenu('MANAGE CENTRAL BASE')
+  // UI.createMenu('MANAGE CENTRAL BASE')
+  .addItem('Create Index', 'createIndex')
+  .addItem('Update Index', 'updateIndex')
+  .addItem('Actualize Students', 'consolidateSheets')
+  .addItem('Add Shelters', 'askUser')
+  .addToUi();
+}
+/*****************************************/
+// From sheet ProgramData filters out the row containing in col2 the name of the variable
+function getVar(variablesRange, col2){               
+  var varRow = variablesRange.filter(function(row){  // filter out the row containing in col2 the name of the variable
+      if (row[1] === col2) {
+        return row;                                  // return an array (only one row) of arrays (cells)
+      }
+    });
+  return varRow[0][2];   // return only one value as string (the 3. cell of the sole row[0])
+}
+/*****************************************/
+// function to create the index
+function createIndex() {
+  // Get all the different sheet IDs
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheets = ss.getSheets();
+  var namesArray = sheetNamesIds(sheets);
+  var indexSheetNames = namesArray[0];
+  var indexSheetIds = namesArray[1];
+  var indexSheet = ss.getSheetByName('Index');
+  // check if sheet called 'Index' already exists
+  // if no index sheet exists, create one
+  if (indexSheet == null) {
+    indexSheet = ss.insertSheet('Index',0);
+  }
+  // if sheet called 'Index' does exist, prompt user for a different name or option to cancel
+  else {
+    var indexNewName = Browser.inputBox('The name Index is already being used', 'Choose another name (Just OK keeps "' + indexSheet.getName() +'")', Browser.Buttons.OK_CANCEL);
+    if (indexNewName === 'cancel') {
+      Browser.msgBox('No index created');
+      return;
+    }
+    else if (indexNewName !== null) {
+      if (indexNewName !== '') {
+        indexSheet = ss.insertSheet(indexNewName,0);
+      }
+    }
+  }
+  // add sheet title, sheet names and hyperlink formulas
+  if (indexSheet) {
+    printIndex(indexSheet,indexSheetNames,indexSheetIds);
+  }
+}
+/*****************************************/
+// function to update the index, assumes index is the first sheet in the workbook
+function updateIndex() {
+  // Get all the different sheet IDs
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheets = ss.getSheets();
+  var indexSheet = sheets[0];
+  var namesArray = sheetNamesIds(sheets);
+  var indexSheetNames = namesArray[0];
+  var indexSheetIds = namesArray[1];
+  printIndex(indexSheet,indexSheetNames,indexSheetIds);
+}
+/*****************************************/
+// function to create array of sheet names and sheet ids
+function sheetNamesIds(sheets) {
+  var indexSheetNames = [];
+  var indexSheetIds = [];
+  // create array of sheet names and sheet gids
+  sheets.forEach(
+    function(sheet){
+      indexSheetNames.push([sheet.getSheetName()]);
+      indexSheetIds.push(
+        [
+          '=HYPERLINK("#gid='
+          + sheet.getSheetId()
+          + '","'
+          + sheet.getSheetName()
+          + '")'
+        ]
+      );
+    }
+  );
+  return [indexSheetNames, indexSheetIds];
+}
+/*****************************************/
+// function to print out the index
+function printIndex(sheet,names,formulas) {
+  sheet.clearContents();
+  sheet.getRange(1,1).setValue('Workbook Index').setFontWeight('bold');
+  sheet.getRange(3,1,names.length,1).setValues(names);
+  sheet.getRange(3,2,formulas.length,1).setFormulas(formulas);
+}
+/*****************************************/
+function askUser(){
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  ss.setActiveSheet(ss.getSheetByName(INDEX_SHEET));
+  // var result = Browser.msgBox('Create files for a new shelter? \n The Name, Institution, e-mail, location etc. for the \n new shelter must already exist in sheet "'
+  // + INDEX_SHEET + '"\n and the cells "file1" and "URL1" must be empty.', // Create new instance of a shelter?
+  // 'Please confirm',
+  // Browser.Buttons.YES_NO);
+  var result = Browser.msgBox(
+    'Create files for a new shelter?', 'The Name, Institution, e-mail, location etc. for the new shelter in sheet "'
+    + INDEX_SHEET + '" must already be filled with data and the cells "file1" and "URL1" must be empty. \n\n Please confirm',
+    Browser.Buttons.YES_NO
+  );
+  if (result == "yes") { // Process the user's response.
+    createReplicaFiles(); // User clicked "Yes".
+  }
+  else {
+    Browser.msgBox('No files created'); // No new sheet created
+  }
+  updateIndex();
+}
+/*****************************************/
+// Run this function to create a separate new replica (a new file) for every individual
+function createReplicaFiles() { 
+  const indexSheet = activeSS.getSheetByName(INDEX_SHEET); // Here are stored the names and email addresses of the individuals
+  const lastRow = indexSheet.getLastRow();
+  const destFolderName = DEST_FOLDER + timeStamp();
+  const currentFolder = getParentFolder(activeSS);
+  const destFolder = currentFolder.createFolder(destFolderName);
+  const templateFileID_1 = TEMPLATE_FILE_ID;    // template_1 is file 'attendance_'
+  const templateFileID_2 = TEMPLATE_FILE_ID_2;  // template_2 is file 'base_attendance_'
+
+  for (var row = FIRST_DATA_ROW; row <= lastRow; row++) {
+    if (indexSheet.getRange(row,FILE_LINK_COL).getValue().toString()=="") {
+      let individual = indexSheet.getRange(row, INSTITUTION_COL).getValue();
+      let individualName = indexSheet.getRange(row, NAME_COL).getValue();
+      let individualRegion = indexSheet.getRange(row, 4).getValue();
+      let individualCity = indexSheet.getRange(row, 5).getValue();
+      let individualEmail = indexSheet.getRange(row, EMAIL_COL).getValue();
+      // let newReplicaName_1 = "attendance_" + individual + "_" + individualName + "_" + individualEmail;
+      let newReplicaName_1 = "SAM_attendance_" + individualName;
+      // let newReplicaName_1 = "attendance_" + individualName + "_" + timeStamp();
+      /** The new individual file is created and the new Name is given. Should the timestamp() be added to name? */
+      let newReplica_1 = createNewSS(templateFileID_1, newReplicaName_1, destFolder).setName(newReplicaName_1); 
+      let newReplicaID_1 = newReplica_1.getId();
+      // let newReplicaName_2 = "base_attendance_" + individual + "_" + individualName + "_" + individualEmail;
+      let newReplicaName_2 = "SAM_base_" + individualName;
+      /** The new individual file is created and the new Name is given. Should the timestamp() be added to name? */
+      let newReplica_2 = createNewSS(templateFileID_2, newReplicaName_2, destFolder).setName(newReplicaName_2); 
+      let newReplicaID_2 = newReplica_2.getId();
+
+      let newReplica_1_SS = SpreadsheetApp.open(newReplica_1);
+      newReplica_1_SS.getRange("ProgramDATA!C4").setValue(newReplicaName_1);  // attendance_ file name
+      newReplica_1_SS.getRange("ProgramDATA!C5").setValue(newReplicaID_1);    // attendance_ file ID
+      newReplica_1_SS.getRange("ProgramDATA!C2").setValue(newReplicaName_2);  // base_attendance_ file name
+      newReplica_1_SS.getRange("ProgramDATA!C3").setValue(newReplicaID_2);    // base_attendance_ file ID
+      let newReplica_2_SS = SpreadsheetApp.open(newReplica_2);
+      newReplica_2_SS.getRange("ProgramDATA!C2").setValue(newReplicaName_2);  // base_attendance_ file name
+      newReplica_2_SS.getRange("ProgramDATA!C3").setValue(newReplicaID_2);    // base_attendance_ file ID
+      newReplica_2_SS.getRange("ProgramDATA!C4").setValue(newReplicaName_1);  // attendance_ file name
+      newReplica_2_SS.getRange("ProgramDATA!C5").setValue(newReplicaID_1);    // attendance_ file ID
+      indexSheet.getRange(row,FILE_LINK_COL).setFormula('=HYPERLINK(' + "\"" + newReplica_2.getUrl() + "\",\"" + newReplicaName_2 + "\")");
+      indexSheet.getRange(row,URL_COL).setValue(newReplica_2.getUrl());
+      indexSheet.getRange(row,FILE_LINK_COL+2).setFormula('=HYPERLINK(' + "\"" + newReplica_1.getUrl() + "\",\"" + newReplicaName_1 + "\")");
+      indexSheet.getRange(row,URL_COL+2).setValue(newReplica_1.getUrl());
+
+      assignEditor(newReplicaID_1, individualEmail);
+      newReplica_1.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.EDIT);
+      assignEditor(newReplicaID_2, individualEmail);
+
+      let sourceURL = indexSheet.getRange(row,URL_COL).getValue().toString();
+      var newSheet = createNewSheetInstance(newReplicaName_2, sourceURL);
+
+      Logger.log("Created a file for " + "Name:\n" + newReplicaName_1 + " and " + newReplicaName_2);
+    } 
+    else {
+      Logger.log("R" + row + " contains a hyperlink already!");
+    }
+  }
+}
+/*****************************************/
+// Create a new file by copying (duplicating) a template file
+function createNewSS(templateFileID, newName, destFolder) {
+  let templateFile = DriveApp.getFileById(templateFileID);
+  let createdNew = templateFile.makeCopy(newName, destFolder);
+  return createdNew;
+}
+/*****************************************/
+function timeStamp() {
+  return Utilities.formatDate(new Date(), "Europe/Athens", "dd-MM-yy_HH:mm");
+}
+/*****************************************/
+function getParentFolder(ss){
+  var file = DriveApp.getFileById(ss.getId());
+  var folders = file.getParents();
+  var folder = folders.next();
+  return folder;
+}
+/*****************************************/
+function assignEditor(fileID, editor) {
+  const SS = SpreadsheetApp.openById(fileID);
+  checkSharing(fileID);
+  SS.addEditor(editor);
+  checkSharing(fileID);
+};
+/*****************************************/
+function checkSharing(fileID) {
+  const SS = SpreadsheetApp.openById(fileID);
+  console.log(
+    SS.getName() + "\n" +
+    SS.getViewers().toString() + "\n" +
+    SS.getEditors().toString() + "\n" +
+    SS.getOwner().getEmail() + "\n" +
+    DriveApp.getFileById(fileID).getSharingAccess().toString() + "\n" +
+    DriveApp.getFileById(fileID).getSharingPermission().toString()
+  );
+}
+/*****************************************/
+function createNewSheetInstance(sheetName, sourceURL){
+  var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  var templateSheet = spreadsheet.getSheetByName(TEMPLATE_SHEET_NAME);
+  var newSheet = templateSheet.copyTo(spreadsheet).setName(sheetName);
+  newSheet.getRange(1, 1).setFormula('=IMPORTRANGE("' + sourceURL + '", "students!A1:V105")');
+  newSheet.showSheet();
+  return newSheet;
+}
+/*****************************************/
+function consolidateSheets() {
+  // var sheetNamesRange = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet().getActiveRange();
+  var indexSheet = SpreadsheetApp.getActive().getSheetByName(INDEX_SHEET);
+  var sheetNamesRange = indexSheet.getRange(FIRST_DATA_ROW, FILE_LINK_COL, indexSheet.getLastRow());
+  var destinationSheetName = "Consolidated";
+  var destinationSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(destinationSheetName);
+  destinationSheet.clear(); // Clear existing data
+  var sheetNames = sheetNamesRange.getValues().flat(); // Get sheet names as a flat array
+  for (var i = 0; i < sheetNames.length; i++) {
+    var sourceSheetName = sheetNames[i];
+    var sourceSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sourceSheetName);
+    if (sourceSheet) {
+      // var lastRow = sourceSheet.getLastRow();
+      var lastColumn = sourceSheet.getLastColumn();
+      // var sourceData = sourceSheet.getRange(5, 1, lastRow - 1, lastColumn).getValues(); // Exclude headers - First row with data is 5
+      var sourceData = sourceSheet.getRange(5, 1, 100, lastColumn).getValues(); // Exclude headers - First row with data is 5
+      destinationSheet.getRange(destinationSheet.getLastRow() + 2, 1, sourceData.length, sourceData[0].length).setValues(sourceData);
+    }
+  }
+}
+/*****************************************/
+// UTILITIES
+/*****************************************/
+/**
+* Displays the names of all sheets in this spreadsheet as an array vertical one in each cell
+* @param {} input 
+* @return the sheets of the current spreadsheet as an array of strings.
+* @customfunction
+*/
+function SHEETNAMES() { // this function can be used within any cell. Returns the sheets of the current spreadsheet
+  var out = new Array()
+  var sheets = SpreadsheetApp.getActiveSpreadsheet().getSheets();
+  for (var i = 0; i < sheets.length; i++) out.push([sheets[i].getName()])
+  return out // returns an array of sheetnames
+}
+
