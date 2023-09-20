@@ -1,3 +1,7 @@
+===================================================================================
+=== This manual is no more accurate. Needs to be completly updated and expanded ===
+===================================================================================
+
 Deployment
 
 -- Check the fileID for both files "attendance_" and "base_attendance". 
