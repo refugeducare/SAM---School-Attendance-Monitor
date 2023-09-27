@@ -62,31 +62,33 @@ function onEdit(e) {
   let eRange = e.range;
   let eCell = eRange.getA1Notation();
         // If a single cell is triggering, run the corresponding triggered function. Triggering cells in different sheets are triggering different functions. The eSheetName is determining which sheet triggers and eCell is determining which cell is triggering.
-  if (triggeringActions.hasOwnProperty(eSheetName) && triggeringActions[eSheetName].cell.hasOwnProperty(eCell)) {
-    triggeringActions[eSheetName].cell[eCell](e);
-    return; // Exit the function to avoid processing range-based actions
-  }  
-        // If a cell from a range is triggering, run the corresponding triggered function. Triggering cells from ranges in different sheets are triggering different functions. The eSheetName is determining which sheet triggers and eCell is determining which cell is triggering. 
   if (triggeringActions.hasOwnProperty(eSheetName)) {
-    for (var range in triggeringActions[eSheetName].range) {
-      let rangeParts = range.split(':');
-      let startCellA1 = rangeParts[0];
-      let endCellA1 = rangeParts[1];
-      let startCell = eRange.getSheet().getRange(startCellA1);
-      let endCell = eRange.getSheet().getRange(endCellA1);
-                  // Check if the edited cell is within the range
-      if (
-        eRange.getRow() >= startCell.getRow() &&
-        eRange.getRow() <= endCell.getRow() &&
-        eRange.getColumn() >= startCell.getColumn() &&
-        eRange.getColumn() <= endCell.getColumn()
-      ) {
+    if (triggeringActions[eSheetName].cell.hasOwnProperty(eCell)) {
+      triggeringActions[eSheetName].cell[eCell](e);
+      return; // Exit the function to avoid processing range-based actions
+    } 
+    else {
+          // If a cell from a range is triggering, run the corresponding triggered function. Triggering cells from ranges in different sheets are triggering different functions. The eSheetName is determining which sheet triggers and eCell is determining which cell is triggering. 
+      for (var range in triggeringActions[eSheetName].range) {
+        let rangeParts = range.split(':');
+        let startCellA1 = rangeParts[0];
+        let endCellA1 = rangeParts[1];
+        let startCell = eRange.getSheet().getRange(startCellA1);
+        let endCell = eRange.getSheet().getRange(endCellA1);
+                    // Check if the edited cell is within the range
+        if (
+          eRange.getRow() >= startCell.getRow() &&
+          eRange.getRow() <= endCell.getRow() &&
+          eRange.getColumn() >= startCell.getColumn() &&
+          eRange.getColumn() <= endCell.getColumn()
+        ) {
 
-        triggeringActions[eSheetName].range[range](e);
-        return; // Exit the function after executing the range-based action
+          triggeringActions[eSheetName].range[range](e);
+          return; // Exit the function after executing the range-based action
+        }
       }
     }
-  }
+  }  
 }
 /*************************************************************************************/
 function editDelete(e) {
@@ -451,6 +453,11 @@ function getVar(variablesRange, col2){
   return varRow[0][2];   // return only one value as string (the 3. cell of the sole row[0])
 }
 /*************************************************************************************/
+// still needed while undeletableCheckboxes_(e) is not working properly. Can be removed later, after undeletableCheckboxes_(e) is corrected and working
+function insertCheckboxes(rangeCheckBox) {
+  SpreadsheetApp.getActive().getRange(rangeCheckBox).insertCheckboxes();
+}
+/*************************************************************************************/
 //***********************************************************************
 // UNDELETABLE CHECKBOXES START
 //***********************************************************************
@@ -645,9 +652,4 @@ function showMessage_(message, timeoutSeconds) {
   // const STUD_DB_names = getVar(PROG_DATA_LOC, 'STUD_DB_names');                             // studentsDB!B5:E
   // const STUD_DB_index = getVar(PROG_DATA_LOC, 'STUD_DB_index');                             // C5:C
   // const THIS_SHELTER_ID = getVar(PROG_DATA_LOC, 'THIS_SHELTER_ID');
-/*************************************************************************************/
-// not needed can be removed
-// function insertCheckboxes(rangeCheckBox) {
-//   SpreadsheetApp.getActive().getRange(rangeCheckBox).insertCheckboxes();
-// }
 /*************************************************************************************/
