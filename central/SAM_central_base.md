@@ -1,10 +1,10 @@
-File location of  files:
+Location of  files:
 
 // parent folder central            https://drive.google.com/drive/folders/1zWMTHRMfAR3fE3bEp0kOR4QSucNiEbcM
 
-// googleSheet   SAM_central_base   https://docs.google.com/spreadsheets/d/1u_XA584h97AqrzQHfkDPDNhfHCiJ0mdsh9LKy9YFB_E/edit#gid=2137001534
+// googleSheet   SAM_central_base   https://docs.google.com/spreadsheets/d/1u_XA584h97AqrzQHfkDPDNhfHCiJ0mdsh9LKy9YFB_E
 
-// bound script  centralBase        https://script.google.com/u/0/home/projects/1HNFbwjemWgRXv6FhHuOv4I4X1uyRPSSKhuO1v-qvXiEx2Cqkr7IP9N8e/edit
+// bound script  centralBase        https://script.google.com/u/0/home/projects/1HNFbwjemWgRXv6FhHuOv4I4X1uyRPSSKhuO1v-qvXiEx2Cqkr7IP9N8e
 
 File 'SAM_central_base' is where management of all file peers for all shelters is carried out. 
 
@@ -15,10 +15,14 @@ Then the script creates a new sheet in file SAM_central_base. The new sheet shou
 
 To be continued - Documentation for other scripts (such as createIndex, updateIndex, actualize Students) not yet completed.
 
-File location of template files: 
-parent folder  fileTemplates  https://drive.google.com/drive/folders/1Uijr4MLujvXXqF7jRdTaIiElItnKTF1A?usp=drive_link
-googleSheet    SAM_base_v1.1  https://docs.google.com/spreadsheets/d/1SBdpnEiupcSglaTRn7kYdcGaj0DpOoLy2j-bLd35R4E/edit?usp=sharing
-bound script   UpdateAttendance  https://script.google.com/u/0/home/projects/1jAorXN2wRQ8zkvdz41lFrMJ4nnjrm2xNVMmfD3jl0UgQSHzh5myhtyTZ/edit
-googleSheet    SAM_attendance_v1.1  https://docs.google.com/spreadsheets/d/1zFRgnibnKa38hnH2A6At1C7YiIHlq-tXni_JFhqxPPY/edit#gid=901827895
-bound script    attendance_      https://script.google.com/u/0/home/projects/1C0ZLIBsWKCDxTIfr3bTylpyYdEE8WNOOJT6340z15T7Tx-h_RWiBpaJQ/edit
+Location of template files: 
+parent folder  fileTemplates  https://drive.google.com/drive/folders/1Uijr4MLujvXXqF7jRdTaIiElItnKTF1A
+
+googleSheet    SAM_base_v1.1  https://docs.google.com/spreadsheets/d/1SBdpnEiupcSglaTRn7kYdcGaj0DpOoLy2j-bLd35R4E
+
+bound script   UpdateAttendance  https://script.google.com/u/0/home/projects/1jAorXN2wRQ8zkvdz41lFrMJ4nnjrm2xNVMmfD3jl0UgQSHzh5myhtyTZ
+
+googleSheet    SAM_attendance_v1.1  https://docs.google.com/spreadsheets/d/1zFRgnibnKa38hnH2A6At1C7YiIHlq-tXni_JFhqxPPY
+
+bound script    attendance_      https://script.google.com/u/0/home/projects/1C0ZLIBsWKCDxTIfr3bTylpyYdEE8WNOOJT6340z15T7Tx-h_RWiBpaJQ
 
