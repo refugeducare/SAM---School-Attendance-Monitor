@@ -18,11 +18,11 @@ To be continued - Documentation for other scripts (such as createIndex, updateIn
 Location of template files: 
 parent folder  fileTemplates  https://drive.google.com/drive/folders/1Uijr4MLujvXXqF7jRdTaIiElItnKTF1A
 
-googleSheet    SAM_base_v1.1  https://docs.google.com/spreadsheets/d/1SBdpnEiupcSglaTRn7kYdcGaj0DpOoLy2j-bLd35R4E
+// googleSheet    SAM_base_v1.1  https://docs.google.com/spreadsheets/d/1SBdpnEiupcSglaTRn7kYdcGaj0DpOoLy2j-bLd35R4E
 
-bound script   UpdateAttendance  https://script.google.com/u/0/home/projects/1jAorXN2wRQ8zkvdz41lFrMJ4nnjrm2xNVMmfD3jl0UgQSHzh5myhtyTZ
+// bound script   UpdateAttendance  https://script.google.com/u/0/home/projects/1jAorXN2wRQ8zkvdz41lFrMJ4nnjrm2xNVMmfD3jl0UgQSHzh5myhtyTZ
 
-googleSheet    SAM_attendance_v1.1  https://docs.google.com/spreadsheets/d/1zFRgnibnKa38hnH2A6At1C7YiIHlq-tXni_JFhqxPPY
+// googleSheet    SAM_attendance_v1.1  https://docs.google.com/spreadsheets/d/1zFRgnibnKa38hnH2A6At1C7YiIHlq-tXni_JFhqxPPY
 
-bound script    attendance_      https://script.google.com/u/0/home/projects/1C0ZLIBsWKCDxTIfr3bTylpyYdEE8WNOOJT6340z15T7Tx-h_RWiBpaJQ
+// bound script    attendance_      https://script.google.com/u/0/home/projects/1C0ZLIBsWKCDxTIfr3bTylpyYdEE8WNOOJT6340z15T7Tx-h_RWiBpaJQ
 
