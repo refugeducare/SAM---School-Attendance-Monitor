@@ -1,7 +1,9 @@
 File location of  files:
 
 // parent folder central            https://drive.google.com/drive/folders/1zWMTHRMfAR3fE3bEp0kOR4QSucNiEbcM
+
 // googleSheet   SAM_central_base   https://docs.google.com/spreadsheets/d/1u_XA584h97AqrzQHfkDPDNhfHCiJ0mdsh9LKy9YFB_E/edit#gid=2137001534
+
 // bound script  centralBase        https://script.google.com/u/0/home/projects/1HNFbwjemWgRXv6FhHuOv4I4X1uyRPSSKhuO1v-qvXiEx2Cqkr7IP9N8e/edit
 
 File 'SAM_central_base' is where management of all file peers for all shelters is carried out. 
