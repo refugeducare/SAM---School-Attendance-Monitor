@@ -4,7 +4,7 @@
 
 Deployment
 
--- Check the fileID for both files "attendance_" and "base_attendance". 
+-- Check the fileID for both files "attendance_" and "base_attendance_". 
 -- In file "base_attendance" go to tab "ProgramDATA". 
 -- Locate the fileID from URL as is displayed in the browser's address bar. The fileID is the part of the URL that uniquely identifies the file. 
 Example: in the URL: 
