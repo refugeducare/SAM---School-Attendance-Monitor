@@ -1,0 +1,50 @@
+// parent folder fileTemplates   https://drive.google.com/drive/folders/1rGnI4iZTlh45neE-J18K06TKeVpC6nbT
+// googleSheet   SAM_base_v_1_1  https://docs.google.com/spreadsheets/d/1LPm3S-ukhRDNTm43oWOkKZR3W03MNWICaqWebDash3g
+// bound script  SAM_base_v_1_1  https://script.google.com/u/0/home/projects/14a5P3rIadmL2skjeKb88ME241BSIWsSw5ZzCmJofuB5n7v_UJ746bPlj/edit
+
+/*************************************************************************************/
+function onEdit(e) {
+  SAM_LIB_v_1_1.onEdit(e);
+}
+/*************************************************************************************/
+// base_attendance 
+/*************************************************************************************/
+function onOpen() {
+  SAM_LIB_v_1_1.onOpen();
+}
+// function onOpen() {
+//   var ui = SpreadsheetApp.getUi();
+//   ui.createMenu('title')
+//     .addItem('opt1', 'func1')
+//     .addToUi();
+// }
+// function func1() {
+//   Browser.msgBox('asd');
+// }
+/*****************************************/
+// function onOpen() {
+//   var ui = SpreadsheetApp.getUi();
+//   ui.createMenu('SAM')
+//     .addItem('Update Attendance', 'actualizeAttendanceLib')
+//     .addToUi();
+// }
+/*****************************************/
+function actualizeAttendanceLib(e) {
+  SAM_LIB_v_1_1.preserveAttendance();
+  SpreadsheetApp.flush();  
+  Utilities.sleep(3000); // 1000 milliseconds = 1 second
+  SAM_LIB_v_1_1.updateAttendance();
+}
+/*************************************************************************************/
+function insertCheck() {
+  SAM_LIB_v_1_1.insertCheckboxes("students!I5:I105");
+}
+function delEntry(e) {
+  SAM_LIB_v_1_1.delEntry(e);
+}
+/*************************************************************************************/
+// base_attendance 
+/*************************************************************************************/
+/*************************************************************************************/
+/*************************************************************************************/
+
