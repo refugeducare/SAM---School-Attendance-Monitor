@@ -291,7 +291,9 @@ function consolidateSheets() {
 
       sourceData = sourceData.map(row => [sourceInstitutionName, ...row]); // add to each row the institutions name as first element 
           // Now sourceData is an array containing only non-empty rows and having as first column the institutions name, as second column the shelters name and as the rest of columns the data of the corresponding sheet. That is, the array sourceData now contains all the required data and can be written to the sheet. 
-      destinationSheet.getRange(destLastRow, 1, sourceData.length, sourceData[0].length).setValues(sourceData);
+      if (sourceData.length > 0) {
+        destinationSheet.getRange(destLastRow, 1, sourceData.length, sourceData[0].length).setValues(sourceData);
+      }
     }
   }
 }
